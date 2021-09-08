@@ -45,7 +45,7 @@ class accountLookup:
 
     def genInvalidReply(self, inputID):
         reply = f"{inputID} is not a valid UUID/username.  \n" \
-                "Please check the spelling of the username and try again."\
+                "Please check the spelling of the username and try again.  \n"\
                 "Reply with '\\u\\MCLookup !help' for a quick help guide.  \n" \
                 "This post was sent by a bot!"
 
@@ -53,7 +53,7 @@ class accountLookup:
 
     def genNotFoundReply(self, inputID):
         reply = f"{inputID} could not be found.  \n" \
-                "Please check the spelling of the username and try again." \
+                "Please check the spelling of the username and try again.  \n" \
                 "Reply with '\\u\\MCLookup !help' for a quick help guide.  \n"\
                 "This post was sent by a bot!"
 
@@ -138,4 +138,4 @@ if __name__ == '__main__':
 
         # If praw throws an exception just catch it
         except praw.exceptions.APIException:
-            print("Probably hit a rate")
+            print("Probably hit a rate limit")
