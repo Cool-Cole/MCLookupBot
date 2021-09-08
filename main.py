@@ -46,7 +46,7 @@ class accountLookup:
     def genInvalidReply(self, inputID):
         reply = f"{inputID} is not a valid UUID/username.  \n" \
                 "Please check the spelling of the username and try again."\
-                "Reply with '\\u\\MCLookup !help' for a quick help guide." \
+                "Reply with '\\u\\MCLookup !help' for a quick help guide.  \n" \
                 "This post was sent by a bot!"
 
         return reply
@@ -54,7 +54,7 @@ class accountLookup:
     def genNotFoundReply(self, inputID):
         reply = f"{inputID} could not be found.  \n" \
                 "Please check the spelling of the username and try again." \
-                "Reply with '\\u\\MCLookup !help' for a quick help guide."\
+                "Reply with '\\u\\MCLookup !help' for a quick help guide.  \n"\
                 "This post was sent by a bot!"
 
         return reply
