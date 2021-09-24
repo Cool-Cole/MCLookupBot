@@ -4,7 +4,8 @@ import praw
 import requests
 import configparser
 
-
+# TODO: Merge the help function into the account lookup class
+# TODO: When the class is initialized require a username variable that can be copied from config file
 class accountLookup:
     def __init__(self):
         self.playerInfoApi = "https://playerdb.co/api/player/minecraft/"
@@ -38,8 +39,10 @@ class accountLookup:
     def genFoundReply(self, data):
         reply = f"{data['data']['player']['username']} has been found!  \n" \
                 f"Their account UUID is {data['data']['player']['id']}.  \n" \
-                f"There player head can be found [here]({data['data']['player']['avatar']}).  \n" \
+                f"There player head can be found [here].  \n" \
                 "This post was sent by a bot!"
+
+                # f"There player head can be found [here]({data['data']['player']['avatar']}).  \n" \
 
         return reply
 
@@ -100,6 +103,8 @@ if __name__ == '__main__':
                         client_id=config['LOGIN']['client_id'],
                         client_secret=config['LOGIN']['client_secret'],
                         user_agent=config['LOGIN']['user_agent'])
+
+        username = config['LOGIN']['username']
     except KeyError:
         print("The configuration file is not set up correctly")
         quit()
@@ -117,11 +122,14 @@ if __name__ == '__main__':
             # split up each word in the message body
             splitmsg = message.body.split()
 
+            print(message.body)
+
             # Look for messages that are both unread and reddit mentions
+            # Not registering mentions???
             if message in r.inbox.mentions() and message in r.inbox.unread():
 
                 # If the mention is from the bots account mark it as read
-                if message.author.name == 'MCLookup':
+                if message.author.name == username:
                     message.mark_read()
 
                 # If the message is a help request send it
