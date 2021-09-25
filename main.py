@@ -7,10 +7,13 @@ import configparser
 # TODO: Merge the help function into the account lookup class
 # TODO: When the class is initialized require a username variable that can be copied from config file
 class accountLookup:
-    def __init__(self):
+    def __init__(self, username):
+
+        self.username = username
+
         self.playerInfoApi = "https://playerdb.co/api/player/minecraft/"
 
-        self.header = {'User-agent': 'This code is associated with the reddit bot /u/MCLookup'}
+        self.header = {'User-agent': f'This code is associated with the reddit bot /u/{self.username}'}
 
     def lookup(self, inputID):
 
@@ -49,7 +52,7 @@ class accountLookup:
     def genInvalidReply(self, inputID):
         reply = f"{inputID} is not a valid UUID/username.  \n" \
                 "Please check the spelling of the username and try again.  \n"\
-                "Reply with '\\u\\MCLookup !help' for a quick help guide.  \n" \
+                f"Reply with '\\u\\{self.username} !help' for a quick help guide.  \n" \
                 "This post was sent by a bot!"
 
         return reply
@@ -57,7 +60,7 @@ class accountLookup:
     def genNotFoundReply(self, inputID):
         reply = f"{inputID} could not be found.  \n" \
                 "Please check the spelling of the username and try again.  \n" \
-                "Reply with '\\u\\MCLookup !help' for a quick help guide.  \n"\
+                f"Reply with '\\u\\{self.username} !help' for a quick help guide.  \n"\
                 "This post was sent by a bot!"
 
         return reply
@@ -77,16 +80,20 @@ class accountLookup:
 
         return (playerFound, data)
 
+    def sendHelp(self):
+        reply = "To see this comment use the command '!help'  \n" \
+                "To use this bot simply:  \n" \
+                f"u/{self.username} PlayerName  \n" \
+                f"u/{self.username} UUID  \n" \
+                "Examples:  \n" \
+                f"u/{self.username} 069a79f4-44e9-4726-a5be-fca90e38aaf5  \n" \
+                f"u/{self.username}  \n" \
+                "This post was sent by a bot!"
 
-def sendHelp(message):
-    message.reply("To see this comment use the command '!help'  \n"
-                  "To use this bot simply:  \n"
-                  "u/MCLookup PlayerName  \n"
-                  "u/MCLookup UUID  \n"
-                  "Examples:  \n"
-                  "u/MCLookup 069a79f4-44e9-4726-a5be-fca90e38aaf5  \n"
-                  "u/MCLookup Notch  \n"
-                  "This post was sent by a bot!")
+        return reply
+
+
+
 
 
 if __name__ == '__main__':
@@ -110,7 +117,7 @@ if __name__ == '__main__':
         quit()
 
     # initialize that account lookup class
-    a = accountLookup()
+    a = accountLookup(username)
 
     # Get the reddit inbox stream
     messages = r.inbox.stream()
@@ -134,7 +141,7 @@ if __name__ == '__main__':
 
                 # If the message is a help request send it
                 elif (len(splitmsg) >= 2 and splitmsg[1] == '!help') or len(splitmsg) <= 1:
-                    sendHelp(message)
+                    message.reply(a.sendHelp())
                     print("Help sent")
 
                 # Lookup the requested MC account
