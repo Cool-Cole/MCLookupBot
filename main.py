@@ -4,8 +4,6 @@ import praw
 import requests
 import configparser
 
-# TODO: Merge the help function into the account lookup class
-# TODO: When the class is initialized require a username variable that can be copied from config file
 class accountLookup:
     def __init__(self, username):
 
@@ -31,10 +29,10 @@ class accountLookup:
             return self.genInvalidReply(inputID)
 
     # Test to see if the input provided is a valid MC account name or UUID
-    # TODO: Minecraft usernames cannot have a - but UUIDs do. Regex passes - regardless of input.
-    # TODO: Regex ignores that MC names can't be longer than
     def validateInput(self, inputID):
-        if len(inputID) > 36 or bool(re.search("[^A-Za-z0-9_-]+", inputID)):
+        # TODO: Minecraft usernames cannot have a - but UUIDs do. Regex passes - regardless of input.
+        # TODO: Condition ignores that MC names can't be longer than 16 chars
+        if len(inputID) > 36 or len(inputID) < 4 or bool(re.search("[^A-Za-z0-9_-]+", inputID)):
             return False
         else:
             return True
@@ -42,10 +40,8 @@ class accountLookup:
     def genFoundReply(self, data):
         reply = f"{data['data']['player']['username']} has been found!  \n" \
                 f"Their account UUID is {data['data']['player']['id']}.  \n" \
-                f"There player head can be found [here].  \n" \
-                "This post was sent by a bot!"
-
-                # f"There player head can be found [here]({data['data']['player']['avatar']}).  \n" \
+                f"There player head can be found [here]({data['data']['player']['avatar']}).  \n" \
+                "This comment was sent by a bot!"
 
         return reply
 
@@ -53,7 +49,7 @@ class accountLookup:
         reply = f"{inputID} is not a valid UUID/username.  \n" \
                 "Please check the spelling of the username and try again.  \n"\
                 f"Reply with '\\u\\{self.username} !help' for a quick help guide.  \n" \
-                "This post was sent by a bot!"
+                "This comment was sent by a bot!"
 
         return reply
 
@@ -61,7 +57,7 @@ class accountLookup:
         reply = f"{inputID} could not be found.  \n" \
                 "Please check the spelling of the username and try again.  \n" \
                 f"Reply with '\\u\\{self.username} !help' for a quick help guide.  \n"\
-                "This post was sent by a bot!"
+                "This comment was sent by a bot!"
 
         return reply
 
@@ -86,9 +82,9 @@ class accountLookup:
                 f"u/{self.username} PlayerName  \n" \
                 f"u/{self.username} UUID  \n" \
                 "Examples:  \n" \
+                f"u/{self.username} Notch  \n" \
                 f"u/{self.username} 069a79f4-44e9-4726-a5be-fca90e38aaf5  \n" \
-                f"u/{self.username}  \n" \
-                "This post was sent by a bot!"
+                "This comment was sent by a bot!"
 
         return reply
 
@@ -111,11 +107,12 @@ if __name__ == '__main__':
                         client_secret=config['LOGIN']['client_secret'],
                         user_agent=config['LOGIN']['user_agent'])
 
-        username = config['LOGIN']['username']
     except KeyError:
         print("The configuration file is not set up correctly")
         quit()
 
+    username = config['LOGIN']['username']
+    
     # initialize that account lookup class
     a = accountLookup(username)
 
@@ -128,8 +125,6 @@ if __name__ == '__main__':
 
             # split up each word in the message body
             splitmsg = message.body.split()
-
-            print(message.body)
 
             # Look for messages that are both unread and reddit mentions
             # Not registering mentions???
