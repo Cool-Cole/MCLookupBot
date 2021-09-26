@@ -1,4 +1,4 @@
-This reddit bot, when mentioned, looks up accounts using [playerdb.co](https://playerdb.co/) and replies with some information about the account requested.
+This reddit bot, when mentioned, looks up minecraft accounts using [playerdb.co](https://playerdb.co/) and replies with some information about the account requested.
 
 In order to use the bot edit the file config.ini to include your bots login information and run main.py.
 
