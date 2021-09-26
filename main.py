@@ -128,7 +128,6 @@ if __name__ == '__main__':
             splitmsg = message.body.split()
 
             # Look for messages that are both unread and reddit mentions
-            # Not registering mentions???
             if message in r.inbox.mentions() and message in r.inbox.unread():
 
                 # If the mention is from the bots account mark it as read
