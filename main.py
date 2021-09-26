@@ -39,7 +39,7 @@ class accountLookup:
 
     def genFoundReply(self, data):
         reply = f"{data['data']['player']['username']} has been found!  \n" \
-                f"Their account UUID is {data['data']['player']['id']}.  \n" \
+                f"Their account UUID is {data['data']['player']['id']}  \n" \
                 f"There player head can be found [here]({data['data']['player']['avatar']}).  \n" \
                 "This comment was sent by a bot!"
 
@@ -64,6 +64,7 @@ class accountLookup:
     def sendApiRequest(self, inputID):
         url = self.playerInfoApi + inputID
 
+        # TODO: Encase request in try except block in case the api is down
         r = requests.get(url, headers=self.header)
 
         data = json.loads(r.text)
@@ -112,7 +113,7 @@ if __name__ == '__main__':
         quit()
 
     username = config['LOGIN']['username']
-    
+
     # initialize that account lookup class
     a = accountLookup(username)
 
@@ -135,7 +136,7 @@ if __name__ == '__main__':
                     message.mark_read()
 
                 # If the message is a help request send it
-                elif (len(splitmsg) >= 2 and splitmsg[1] == '!help') or len(splitmsg) <= 1:
+                elif len(splitmsg) == 1 or len(splitmsg) > 2 or splitmsg[1] == '!help':
                     message.reply(a.sendHelp())
                     print("Help sent")
 
